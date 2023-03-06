@@ -30,20 +30,26 @@ it("works when you click on the right arrow", function() {
   expect(queryByAltText("Photo by Pratik Patel on Unsplash")).toBeInTheDocument();
 });
 
-it("works when you click on the right arrow", function() {
-  const { queryByTestId, queryByAltText } = render(<Carousel />);
+it("hides and shows arrows appropriately", function() {
+  const { getByTestId } = render(<Carousel />);
+  const leftArrow = getByTestId("left-arrow");
+  const rightArrow = getByTestId("right-arrow");
 
-  // expect the first image to show, but not the second
-  expect(queryByAltText("Photo by Richard Pasquarella on Unsplash")).toBeInTheDocument();
-  expect(queryByAltText("Photo by Pratik Patel on Unsplash")).not.toBeInTheDocument();
+  // expect the left arrow to be missing, but the right button to be present.
+  expect(leftArrow).toHaveClass("hidden");
+  expect(rightArrow).not.toHaveClass("hidden");
 
-  // move forward in the carousel
-  const rightArrow = queryByTestId("right-arrow");
+  // move forward, expect both arrow to exist
+  fireEvent.click(getByTestId("right-arrow"));
+ // expect the left arrow to be missing, but the right button to be present.
+ expect(leftArrow).not.toHaveClass("hidden");
+ expect(rightArrow).not.toHaveClass("hidden");
+
+  // move forward again, expect only the right arrow to be missing
   fireEvent.click(rightArrow);
+ expect(leftArrow).not.toHaveClass("hidden");
+ expect(rightArrow).toHaveClass("hidden");
 
-  // expect the second image to show, but not the first
-  expect(queryByAltText("Photo by Richard Pasquarella on Unsplash")).not.toBeInTheDocument();
-  expect(queryByAltText("Photo by Pratik Patel on Unsplash")).toBeInTheDocument();
 });
 
 it("works when you click on the left arrow", function() {
